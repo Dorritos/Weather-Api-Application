@@ -50,11 +50,10 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         currentWeather.observe(this@CurrentWeatherFragment, Observer {
             it?.let {
                 group_loading.visibility = View.GONE
-                updateDayTime(it.isDay)
+               // updateDayTime(it.isDay)
                 updateLocation("Kazan")
                 updateTemperature(it.temperature, it.feelslike)
-                updatePrecip(it.precip)
-                updateWind(it.windSpeed)
+                updateDetails(it.windSpeed, it.precip, it.humidity, it.pressure)
             }
         })
 
@@ -86,32 +85,49 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         {
             imageViewDead.setImageResource(R.drawable.ic_dead)
             textViewDead.text = "$temperature °C"
-            imageViewDayTime.visibility = View.INVISIBLE
-            textViewCity.visibility = View.INVISIBLE
-            textViewDate.visibility = View.INVISIBLE
-            textViewTemp.visibility = View.INVISIBLE
-            textViewFeels.visibility = View.INVISIBLE
-            textViewWind.visibility = View.INVISIBLE
-            textViewPrecip.visibility = View.INVISIBLE
+            imageViewDayTime.visibility = View.GONE
 
+            textViewCity.visibility = View.GONE
+            textViewDate.visibility = View.GONE
+            textViewTemp.visibility = View.GONE
+            textViewFeels.visibility = View.GONE
+
+            textViewWind.visibility = View.GONE
+            textViewPrecip.visibility = View.GONE
+            textViewHumidity.visibility = View.GONE
+            textViewPressure.visibility = View.GONE
+
+            textViewWindValue.visibility = View.GONE
+            textViewPrecipValue.visibility = View.GONE
+            textViewHumidValue.visibility = View.GONE
+            textViewPressureValue.visibility = View.GONE
+
+            imageViewWind.visibility = View.GONE
+            imageViewPrecip.visibility = View.GONE
+            imageViewHumid.visibility = View.GONE
+            imageViewPressure.visibility = View.GONE
+
+            detaislDivider.visibility = View.GONE
         }
         else
         {
-            textViewDead.visibility = View.INVISIBLE
-            textViewTemp.text = "$temperature°C"
-            textViewFeels.text = "Feels like: $feelslike°C"
+            imageViewDayTime.setImageResource(R.drawable.ic_sunny)
+
+            textViewTemp.text = "$temperature" + "C"
+            textViewFeels.text = "Ощущается как $feelslike" + "C"
+
+            textViewDead.visibility = View.GONE
         }
     }
 
-    private fun updatePrecip(precip: Double) {
+    private fun updateDetails(windSpeed: Int, precip: Double, pressure: Int, humidity: Int) {
+        textViewWind.text = "$windSpeed" + "kph"
         textViewPrecip.text = "Precip: $precip" + "  mm"
+        textViewPressure.text = "$pressure"
+        textViewHumidity.text = "$humidity"
     }
 
-    private fun updateWind(windSpeed: Int) {
-        textViewWind.text = "Wind: $windSpeed" + " m/s"
-    }
-
-    private fun updateDayTime(isDay: String) {
+    /*private fun updateDayTime(isDay: String) {
         if (isDay == "yes")
         {
             imageViewDayTime.setImageResource(R.drawable.ic_sunny)
@@ -128,6 +144,29 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
             textViewWind.setTextColor(resources.getColor(R.color.colorLightTextTheme))
             textViewPrecip.setTextColor(resources.getColor(R.color.colorLightTextTheme))
         }
+    }*/
+
+    /*private fun goodWeatherConditions(temperature: Int, feelslike: Int) {
+        textViewTemp.text = "$temperature" + "C"
+        textViewFeels.text = "$feelslike" + "C"
     }
+
+    private fun badWeatherConditions(temperature: Int) {
+        imageViewDead.setImageResource(R.drawable.ic_dead)
+        textViewDead.text = "$temperature °C"
+        imageViewDayTime.visibility = View.INVISIBLE
+        textViewCity.visibility = View.INVISIBLE
+        textViewDate.visibility = View.INVISIBLE
+        textViewTemp.visibility = View.INVISIBLE
+        textViewFeels.visibility = View.INVISIBLE
+        textViewWind.visibility = View.INVISIBLE
+        textViewPrecip.visibility = View.INVISIBLE
+        textViewHumidity.visibility = View.INVISIBLE
+        textViewPressure.visibility = View.INVISIBLE
+    }*/
+
+    /*private fun setDarkTheme() {
+
+    }*/
 
 }
