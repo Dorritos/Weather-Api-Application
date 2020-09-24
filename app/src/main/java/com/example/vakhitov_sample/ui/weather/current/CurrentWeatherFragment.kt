@@ -66,6 +66,11 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
              }
                 updateLocation(location.name)
         })
+
+        val currentDate = viewModel.weatherLocation.await()
+        currentLocation.observe( this@CurrentWeatherFragment, Observer {
+            updateDate(it.localtime)
+        })
     }
 
     private fun updateLocation(name: String) {
@@ -92,8 +97,9 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         }
         else
         {
-            textViewTemp.text = "$temperature °C"
-            textViewFeels.text = "Feels like: $feelslike °C"
+            textViewDead.visibility = View.INVISIBLE
+            textViewTemp.text = "$temperature°C"
+            textViewFeels.text = "Feels like: $feelslike°C"
         }
     }
 

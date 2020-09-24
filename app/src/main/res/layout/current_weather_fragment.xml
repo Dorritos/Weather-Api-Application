@@ -24,7 +24,7 @@
         android:layout_marginTop="30dp"
         android:text="City"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/imageViewSunny"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewDayTime"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +36,7 @@
         android:text="Date"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageViewSunny"
+        app:layout_constraintStart_toEndOf="@+id/imageViewDayTime"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
