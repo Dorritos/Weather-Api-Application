@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 const val CURRENT_LOCATION_ID = 0
 
 @Entity(tableName = "current_location")
-data class Location(
+data class WeatherLocation(
     @ColumnInfo(name = "country")
     val country: String,
 

@@ -16,8 +16,9 @@ class ConnectivityInterceptorImpl (
     private val appContext = context.applicationContext
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        if (isOnline())
-            throw NoConnectivityException()
+        if (isOnline()) {
+
+        }
         return chain.proceed(chain.request())
     }
 

@@ -2,24 +2,17 @@ package com.example.vakhitov_sample.ui.weather.current
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.vakhitov_sample.R
-import com.example.vakhitov_sample.data.network.ConnectivityInterceptorImpl
-import com.example.vakhitov_sample.data.network.WeatherNetworkDataSourceImpl
-import com.example.vakhitov_sample.data.network.WeatherStackApi
-import com.example.vakhitov_sample.internal.glide.GlideApp
 import com.example.vakhitov_sample.ui.base.ScopedFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.current_weather_fragment.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.android.synthetic.main.current_weather_fragment.view.*
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
-import org.kodein.di.android.closestKodein
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
@@ -57,6 +50,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         currentWeather.observe(this@CurrentWeatherFragment, Observer {
             it?.let {
                 group_loading.visibility = View.GONE
+                updateDayTime(it.isDay)
                 updateLocation("Kazan")
                 updateTemperature(it.temperature, it.feelslike)
                 updatePrecip(it.precip)
@@ -64,12 +58,13 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
             }
         })
 
-        val currentDate = viewModel.weatherDate.await()
-        currentDate.observe( this@CurrentWeatherFragment, Observer {
-             it?.let {
-                 updateDate(it.localtime)
-                 updateLocation(it.name)
+        val currentLocation = viewModel.weatherLocation.await()
+        currentLocation.observe( this@CurrentWeatherFragment, Observer { location ->
+             if (location == null)
+             {
+                 return@Observer
              }
+                updateLocation(location.name)
         })
     }
 
@@ -82,12 +77,21 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
     }
 
     private fun updateTemperature(temperature: Int, feelslike: Int) {
-        if (temperature > 30 || temperature < -20) {
-            imageViewSunny.setImageResource(R.drawable.ic_dead)
-            textViewTemp.text = "Смерть"
-            textViewFeels.text = "Ощущается как: ебаный ад"
+        if (temperature > 30 || temperature < -20)
+        {
+            imageViewDead.setImageResource(R.drawable.ic_dead)
+            textViewDead.text = "$temperature °C"
+            imageViewDayTime.visibility = View.INVISIBLE
+            textViewCity.visibility = View.INVISIBLE
+            textViewDate.visibility = View.INVISIBLE
+            textViewTemp.visibility = View.INVISIBLE
+            textViewFeels.visibility = View.INVISIBLE
+            textViewWind.visibility = View.INVISIBLE
+            textViewPrecip.visibility = View.INVISIBLE
+
         }
-        else {
+        else
+        {
             textViewTemp.text = "$temperature °C"
             textViewFeels.text = "Feels like: $feelslike °C"
         }
@@ -99,6 +103,25 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
 
     private fun updateWind(windSpeed: Int) {
         textViewWind.text = "Wind: $windSpeed" + " m/s"
+    }
+
+    private fun updateDayTime(isDay: String) {
+        if (isDay == "yes")
+        {
+            imageViewDayTime.setImageResource(R.drawable.ic_sunny)
+        }
+        else
+        {
+            CurrentWeatherScreen.setBackgroundColor(resources.getColor(R.color.colorDarkTheme))
+            bottom_nav.setBackgroundColor(resources.getColor(R.color.colorDarkTheme))
+
+            textViewCity.setTextColor(resources.getColor(R.color.colorLightTextTheme))
+            textViewDate.setTextColor(resources.getColor(R.color.colorLightTextTheme))
+            textViewTemp.setTextColor(resources.getColor(R.color.colorLightTextTheme))
+            textViewFeels.setTextColor(resources.getColor(R.color.colorLightTextTheme))
+            textViewWind.setTextColor(resources.getColor(R.color.colorLightTextTheme))
+            textViewPrecip.setTextColor(resources.getColor(R.color.colorLightTextTheme))
+        }
     }
 
 }
