@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="Weather Location">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Настройки локации"
+        android:visibility="visible"
+        tools:visibility="visible">
+
+        <MultiSelectListPreference
+            android:key="CUSTOM_LOCATION"
+            android:selectable="true"
+            android:title="Какой город гнида?" />
 
         <SwitchPreference
-            android:key="USE_DEVICE_LOCATION"
-            android:title="Уверен что не долбаеб?"
-            android:summary="Allow the application   to get your location"
             android:defaultValue="true"
-            android:icon="@drawable/ic_dead"
-            android:disableDependentsState="true" />
+            android:disableDependentsState="true"
+            android:key="USE_DEVICE_LOCATION"
 
-        <EditTextPreference
-            android:key="CUSTOM_LOCATION"
-            android:title="Location"
-            android:summary="The Location хуейшион" />
+            android:title="Разрешить приложению использовать геолокацию" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="Разное" >
+
+        <ListPreference
+            android:key="azat"
+            android:title="Показать буйного"    />
 
     </PreferenceCategory>
 

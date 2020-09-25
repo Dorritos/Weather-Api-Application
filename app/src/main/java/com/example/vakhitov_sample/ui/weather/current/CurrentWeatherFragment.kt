@@ -49,7 +49,8 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         val currentWeather = viewModel.weather.await()
         currentWeather.observe(this@CurrentWeatherFragment, Observer {
             it?.let {
-                group_loading.visibility = View.GONE
+                groupLoading.visibility = View.GONE
+                
                // updateDayTime(it.isDay)
                 updateLocation("Kazan")
                 updateTemperature(it.temperature, it.feelslike)
@@ -113,18 +114,18 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         {
             imageViewDayTime.setImageResource(R.drawable.ic_sunny)
 
-            textViewTemp.text = "$temperature" + "C"
-            textViewFeels.text = "Ощущается как $feelslike" + "C"
+            textViewTemp.text = "$temperature" + "°C"
+            textViewFeels.text = "Ощущается как $feelslike" + "°C"
 
             textViewDead.visibility = View.GONE
         }
     }
 
     private fun updateDetails(windSpeed: Int, precip: Double, pressure: Int, humidity: Int) {
-        textViewWind.text = "$windSpeed" + "kph"
-        textViewPrecip.text = "Precip: $precip" + "  mm"
-        textViewPressure.text = "$pressure"
-        textViewHumidity.text = "$humidity"
+        textViewWindValue.text = "$windSpeed" + " км/ч"
+        textViewPrecipValue.text = "$precip" + "  мм"
+        textViewPressureValue.text = "$pressure"
+        textViewHumidValue.text = "$humidity"
     }
 
     /*private fun updateDayTime(isDay: String) {
