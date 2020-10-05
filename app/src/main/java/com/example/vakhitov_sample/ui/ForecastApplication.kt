@@ -5,6 +5,7 @@ import com.example.vakhitov_sample.data.db.ForecastDatabase
 import com.example.vakhitov_sample.data.network.*
 import com.example.vakhitov_sample.data.provider.LocationProvider
 import com.example.vakhitov_sample.data.provider.LocationProviderImpl
+/*import com.example.vakhitov_sample.data.provider.LocationProviderImpl*/
 import com.example.vakhitov_sample.data.repository.ForecastRepository
 import com.example.vakhitov_sample.data.repository.ForecastRepositoryImpl
 import com.example.vakhitov_sample.ui.weather.current.CurrentWeatherViewModelFactory
@@ -27,7 +28,7 @@ class ForecastApplication : Application(), KodeinAware {
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance())}
         bind() from singleton { WeatherStackApi(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance())}
-        bind<LocationProvider>() with singleton { LocationProviderImpl() }
+        bind<LocationProvider>() with singleton { LocationProviderImpl(instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance(), instance(), instance())}
         bind() from provider { CurrentWeatherViewModelFactory(instance())}
     }
