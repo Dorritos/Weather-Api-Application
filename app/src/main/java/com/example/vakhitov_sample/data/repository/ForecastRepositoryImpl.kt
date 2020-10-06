@@ -56,7 +56,7 @@ class ForecastRepositoryImpl (
             return
         }
 
-        if (isFetchCurrentNeeded(ZonedDateTime.now().minusHours(1)))
+        if (isFetchCurrentNeeded(lastWeatherLocation.zonedDateTime))
         {
             fetchCurrentWeather()
         }

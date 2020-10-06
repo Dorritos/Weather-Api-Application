@@ -1,6 +1,7 @@
 package com.example.vakhitov_sample.ui
 
 import android.app.Application
+import android.content.Context
 import com.example.vakhitov_sample.data.db.ForecastDatabase
 import com.example.vakhitov_sample.data.network.*
 import com.example.vakhitov_sample.data.provider.LocationProvider
@@ -9,6 +10,7 @@ import com.example.vakhitov_sample.data.provider.LocationProviderImpl
 import com.example.vakhitov_sample.data.repository.ForecastRepository
 import com.example.vakhitov_sample.data.repository.ForecastRepositoryImpl
 import com.example.vakhitov_sample.ui.weather.current.CurrentWeatherViewModelFactory
+import com.google.android.gms.location.LocationServices
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -28,7 +30,8 @@ class ForecastApplication : Application(), KodeinAware {
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance())}
         bind() from singleton { WeatherStackApi(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance())}
-        bind<LocationProvider>() with singleton { LocationProviderImpl(instance()) }
+        bind() from provider { LocationServices.getFusedLocationProviderClient(instance<Context>())}
+        bind<LocationProvider>() with singleton { LocationProviderImpl(instance(), instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance(), instance(), instance())}
         bind() from provider { CurrentWeatherViewModelFactory(instance())}
     }

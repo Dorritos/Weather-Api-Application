@@ -52,7 +52,6 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
                 groupLoading.visibility = View.GONE
                 
                // updateDayTime(it.isDay)
-                updateLocation("Kazan")
                 updateTemperature(it.temperature, it.feelslike)
                 updateDetails(it.windSpeed, it.precip, it.humidity, it.pressure)
             }
@@ -125,10 +124,10 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
         textViewWindValue.text = "$windSpeed" + " км/ч"
         textViewPrecipValue.text = "$precip" + "  мм"
         textViewPressureValue.text = "$pressure"
-        textViewHumidValue.text = "$humidity"
+        textViewHumidValue.text = "$humidity" + "%"
     }
 
-    /*private fun updateDayTime(isDay: String) {
+    private fun updateDayTime(isDay: String) {
         if (isDay == "yes")
         {
             imageViewDayTime.setImageResource(R.drawable.ic_sunny)
@@ -145,7 +144,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware {
             textViewWind.setTextColor(resources.getColor(R.color.colorLightTextTheme))
             textViewPrecip.setTextColor(resources.getColor(R.color.colorLightTextTheme))
         }
-    }*/
+    }
 
     /*private fun goodWeatherConditions(temperature: Int, feelslike: Int) {
         textViewTemp.text = "$temperature" + "C"

@@ -5,6 +5,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
 
 const val CURRENT_LOCATION_ID = 0
 
@@ -14,17 +17,17 @@ data class WeatherLocation(
     val country: String,
 
     @ColumnInfo(name = "lat")
-    val lat: String,
+    val lat: Double,
 
     @ColumnInfo(name = "localtime")
     val localtime: String,
 
     @ColumnInfo(name = "localtimeEpoch")
     @SerializedName("localtime_epoch")
-    val localtimeEpoch: Int,
+    val localtimeEpoch: Long,
 
     @ColumnInfo(name = "lon")
-    val lon: String,
+    val lon: Double,
 
     @ColumnInfo(name = "name")
     val name: String,
@@ -43,4 +46,11 @@ data class WeatherLocation(
 {
     @PrimaryKey(autoGenerate = false)
     var id: Int = CURRENT_LOCATION_ID
+
+    val zonedDateTime: ZonedDateTime
+        get() {
+            val instant = Instant.ofEpochSecond(localtimeEpoch)
+            val zoneId = ZoneId.of(timezoneId)
+            return ZonedDateTime.ofInstant(instant, zoneId)
+        }
 }

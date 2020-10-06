@@ -15,6 +15,7 @@ import java.util.jar.Manifest
 const val  USE_DEVICE_LOCATION = "USE_DEVICE_LOCATION"
 const val  CUSTOM_LOCATION = "CUSTOM_LOCATION"
 
+
 class LocationProviderImpl (
     private val fusedLocationProviderClient: FusedLocationProviderClient, context: Context
 ):  PreferenceProvider(context), LocationProvider {
@@ -22,12 +23,36 @@ class LocationProviderImpl (
     private val appContext = context.applicationContext
 
     override suspend fun hasLocationChanged(lastWeatherLocation: WeatherLocation): Boolean {
-        val deviceLocationChanged = hasDeviceLocationChanged(lastWeatherLocation)
+        val deviceLocationChanged = try
+        {
+            hasDeviceLocationChanged(lastWeatherLocation)
+        }
+        catch (e: LocationPermissionNotGrantedException)
+        {
+            false
+        }
         return deviceLocationChanged || hasCustomLocationChanged(lastWeatherLocation)
     }
 
     override suspend fun getPrefferedLocationString(): String {
-        return "Kazan"
+        if (isUsingDeviceLocation())
+        {
+            try
+            {
+                val deviceLocation = getLastDeviceLocation().await()
+                    ?:
+                return "${getCustomLocationName()}"
+                return "${deviceLocation.latitude}, ${deviceLocation.longitude}"
+            }
+            catch (e: LocationPermissionNotGrantedException)
+            {
+                return "${getCustomLocationName()}"
+            }
+        }
+        else
+        {
+            return "${getCustomLocationName()}"
+        }
     }
 
     private suspend fun hasDeviceLocationChanged(lastWeatherLocation: WeatherLocation) : Boolean {
@@ -47,9 +72,9 @@ class LocationProviderImpl (
         }
     }
 
-    private fun hasCustomLocationChanged(lastWetaherLocation: WeatherLocation): Boolean {
+    private fun hasCustomLocationChanged(lastWeatherLocation: WeatherLocation): Boolean {
         val customLocationName = getCustomLocationName()
-        return customLocationName != lastWetaherLocation.name
+        return customLocationName != lastWeatherLocation.name
     }
     private fun getCustomLocationName(): String? {
         return preferences.getString(CUSTOM_LOCATION, null)
@@ -73,6 +98,6 @@ class LocationProviderImpl (
 
     private fun hasLocationPermission() : Boolean {
         return ContextCompat.checkSelfPermission(appContext,
-           Manifest.permission.ACCES_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+           android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 }

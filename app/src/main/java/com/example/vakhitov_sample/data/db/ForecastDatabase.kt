@@ -9,7 +9,7 @@ import com.example.vakhitov_sample.data.db.entity.WeatherLocation
 
 @Database(
     entities = [CurrentWeatherEntry::class, WeatherLocation::class],
-    version = 4
+    version = 1
 )
 
 abstract class ForecastDatabase : RoomDatabase() {
